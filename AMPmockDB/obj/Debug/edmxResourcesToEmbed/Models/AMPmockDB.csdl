@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="APMDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Asset">
+    <Key>
+      <PropertyRef Name="Asset_ID" />
+    </Key>
+    <Property Name="Asset_ID" Type="Guid" Nullable="false" />
+    <Property Name="Asset_nbShare" Type="Int32" Nullable="false" />
+    <Property Name="Asset_ticker" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Asset_AQS_date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Asset_shareCost" Type="Single" Nullable="false" />
+    <Property Name="Asset_currentValue" Type="Single" Nullable="false" />
+    <Property Name="Portfolio_ID" Type="Guid" Nullable="false" />
+    <Property Name="Company_symbol" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Company" Relationship="APMDBModel.FK_Asset_Company" FromRole="Asset" ToRole="Company" />
+    <NavigationProperty Name="portfolio" Relationship="APMDBModel.FK_Asset_portfolio" FromRole="Asset" ToRole="portfolio" />
+  </EntityType>
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="Company_symbol" />
+    </Key>
+    <Property Name="Company_symbol" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Company_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Company_sector" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Company_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Company_capital" Type="Single" Nullable="false" />
+    <Property Name="Company_totalNbrShares" Type="Single" Nullable="false" />
+    <NavigationProperty Name="Asset" Relationship="APMDBModel.FK_Asset_Company" FromRole="Company" ToRole="Asset" />
+  </EntityType>
+  <EntityType Name="Investor">
+    <Key>
+      <PropertyRef Name="Investor_ID" />
+    </Key>
+    <Property Name="Investor_ID" Type="Guid" Nullable="false" />
+    <Property Name="Investor_FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Investor_birth" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Investor_timeHorizon" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Investor_email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Expert_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="User" Relationship="APMDBModel.FK_Investor_User" FromRole="Investor" ToRole="User" />
+    <NavigationProperty Name="portfolio" Relationship="APMDBModel.FK_portfolio_Investor" FromRole="Investor" ToRole="portfolio" />
+  </EntityType>
+  <EntityType Name="portfolio">
+    <Key>
+      <PropertyRef Name="Portfolio_ID" />
+    </Key>
+    <Property Name="Portfolio_ID" Type="Guid" Nullable="false" />
+    <Property Name="Portfolio_title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Portfolio_creationDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Investor_ID" Type="Guid" Nullable="false" />
+    <NavigationProperty Name="Asset" Relationship="APMDBModel.FK_Asset_portfolio" FromRole="portfolio" ToRole="Asset" />
+    <NavigationProperty Name="Investor" Relationship="APMDBModel.FK_portfolio_Investor" FromRole="portfolio" ToRole="Investor" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="user_email" />
+    </Key>
+    <Property Name="use_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="user_pwd" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="user_email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="user_role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Investor" Relationship="APMDBModel.FK_Investor_User" FromRole="User" ToRole="Investor" />
+  </EntityType>
+  <EntityContainer Name="APMDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Asset" EntityType="Self.Asset" />
+    <EntitySet Name="Company" EntityType="Self.Company" />
+    <EntitySet Name="Investor" EntityType="Self.Investor" />
+    <EntitySet Name="portfolio" EntityType="Self.portfolio" />
+    <EntitySet Name="User" EntityType="Self.User" />
+    <AssociationSet Name="FK_Asset_Company" Association="APMDBModel.FK_Asset_Company">
+      <End Role="Company" EntitySet="Company" />
+      <End Role="Asset" EntitySet="Asset" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Asset_portfolio" Association="APMDBModel.FK_Asset_portfolio">
+      <End Role="portfolio" EntitySet="portfolio" />
+      <End Role="Asset" EntitySet="Asset" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Investor_User" Association="APMDBModel.FK_Investor_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="Investor" EntitySet="Investor" />
+    </AssociationSet>
+    <AssociationSet Name="FK_portfolio_Investor" Association="APMDBModel.FK_portfolio_Investor">
+      <End Role="Investor" EntitySet="Investor" />
+      <End Role="portfolio" EntitySet="portfolio" />
+    </AssociationSet>
+  </EntityContainer>
+  <Association Name="FK_Asset_Company">
+    <End Type="APMDBModel.Company" Role="Company" Multiplicity="1" />
+    <End Type="APMDBModel.Asset" Role="Asset" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="Company_symbol" />
+      </Principal>
+      <Dependent Role="Asset">
+        <PropertyRef Name="Company_symbol" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Asset_portfolio">
+    <End Type="APMDBModel.portfolio" Role="portfolio" Multiplicity="1" />
+    <End Type="APMDBModel.Asset" Role="Asset" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="portfolio">
+        <PropertyRef Name="Portfolio_ID" />
+      </Principal>
+      <Dependent Role="Asset">
+        <PropertyRef Name="Portfolio_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Investor_User">
+    <End Type="APMDBModel.User" Role="User" Multiplicity="1" />
+    <End Type="APMDBModel.Investor" Role="Investor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="user_email" />
+      </Principal>
+      <Dependent Role="Investor">
+        <PropertyRef Name="Expert_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_portfolio_Investor">
+    <End Type="APMDBModel.Investor" Role="Investor" Multiplicity="1" />
+    <End Type="APMDBModel.portfolio" Role="portfolio" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Investor">
+        <PropertyRef Name="Investor_ID" />
+      </Principal>
+      <Dependent Role="portfolio">
+        <PropertyRef Name="Investor_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

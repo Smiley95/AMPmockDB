@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="APMDBModelStoreContainer" CdmEntityContainer="APMDBEntities">
+    <EntitySetMapping Name="Asset">
+      <EntityTypeMapping TypeName="APMDBModel.Asset">
+        <MappingFragment StoreEntitySet="Asset">
+          <ScalarProperty Name="Asset_ID" ColumnName="Asset_ID" />
+          <ScalarProperty Name="Asset_nbShare" ColumnName="Asset_nbShare" />
+          <ScalarProperty Name="Asset_ticker" ColumnName="Asset_ticker" />
+          <ScalarProperty Name="Asset_AQS_date" ColumnName="Asset_AQS_date" />
+          <ScalarProperty Name="Asset_shareCost" ColumnName="Asset_shareCost" />
+          <ScalarProperty Name="Portfolio_ID" ColumnName="Portfolio_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Investor">
+      <EntityTypeMapping TypeName="APMDBModel.Investor">
+        <MappingFragment StoreEntitySet="Investor">
+          <ScalarProperty Name="Investor_ID" ColumnName="Investor_ID" />
+          <ScalarProperty Name="Investor_FullName" ColumnName="Investor_FullName" />
+          <ScalarProperty Name="Investor_birth" ColumnName="Investor_birth" />
+          <ScalarProperty Name="Investor_timeHorizon" ColumnName="Investor_timeHorizon" />
+          <ScalarProperty Name="Investor_email" ColumnName="Investor_email" />
+          <ScalarProperty Name="Expert_ID" ColumnName="Expert_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="User">
+      <EntityTypeMapping TypeName="APMDBModel.User">
+        <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="use_name" ColumnName="use_name" />
+          <ScalarProperty Name="user_pwd" ColumnName="user_pwd" />
+          <ScalarProperty Name="user_email" ColumnName="user_email" />
+          <ScalarProperty Name="user_role" ColumnName="user_role" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PortfolioSet">
+      <EntityTypeMapping TypeName="APMDBModel.Portfolio">
+        <MappingFragment StoreEntitySet="Portfolio">
+          <ScalarProperty Name="Investor_ID" ColumnName="Investor_ID" />
+          <ScalarProperty Name="Portfolio_creationDate" ColumnName="Portfolio_creationDate" />
+          <ScalarProperty Name="Portfolio_title" ColumnName="Portfolio_title" />
+          <ScalarProperty Name="Portfolio_ID" ColumnName="Portfolio_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

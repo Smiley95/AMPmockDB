@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="6e43ca41b39b43348c95ad14abc98d08" Name="Diagram1">
+        <EntityTypeShape EntityType="APMDBModel.Asset" Width="1.5" PointX="7.5" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="APMDBModel.Investor" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="APMDBModel.User" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <AssociationConnector Association="APMDBModel.FK_Investor_User" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="APMDBModel.Portfolio" Width="1.5" PointX="4.875" PointY="4.625" />
+        <AssociationConnector Association="APMDBModel.FK_Asset_portfolio1" />
+        <AssociationConnector Association="APMDBModel.FK_portfolio_Investor1" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

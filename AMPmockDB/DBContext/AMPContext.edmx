@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="APMDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Asset">
+          <Key>
+            <PropertyRef Name="Asset_ID" />
+          </Key>
+          <Property Name="Asset_ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Asset_nbShare" Type="int" Nullable="false" />
+          <Property Name="Asset_ticker" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Asset_AQS_date" Type="date" Nullable="false" />
+          <Property Name="Asset_shareCost" Type="real" Nullable="false" />
+          <Property Name="Portfolio_ID" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Investor">
+          <Key>
+            <PropertyRef Name="Investor_ID" />
+          </Key>
+          <Property Name="Investor_ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Investor_FullName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Investor_birth" Type="date" Nullable="false" />
+          <Property Name="Investor_timeHorizon" Type="date" Nullable="false" />
+          <Property Name="Investor_email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Expert_ID" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Portfolio">
+          <Key>
+            <PropertyRef Name="Portfolio_ID" />
+          </Key>
+          <Property Name="Portfolio_ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Portfolio_title" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Portfolio_creationDate" Type="date" Nullable="false" />
+          <Property Name="Investor_ID" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="user_email" />
+          </Key>
+          <Property Name="use_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="user_pwd" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="user_email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="user_role" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Asset_portfolio">
+          <End Role="Portfolio" Type="Self.Portfolio" Multiplicity="1" />
+          <End Role="Asset" Type="Self.Asset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Portfolio">
+              <PropertyRef Name="Portfolio_ID" />
+            </Principal>
+            <Dependent Role="Asset">
+              <PropertyRef Name="Portfolio_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Investor_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Investor" Type="Self.Investor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="user_email" />
+            </Principal>
+            <Dependent Role="Investor">
+              <PropertyRef Name="Expert_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_portfolio_Investor">
+          <End Role="Investor" Type="Self.Investor" Multiplicity="1" />
+          <End Role="Portfolio" Type="Self.Portfolio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Investor">
+              <PropertyRef Name="Investor_ID" />
+            </Principal>
+            <Dependent Role="Portfolio">
+              <PropertyRef Name="Investor_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="APMDBModelStoreContainer">
+          <EntitySet Name="Asset" EntityType="Self.Asset" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Investor" EntityType="Self.Investor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Portfolio" EntityType="Self.Portfolio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Asset_portfolio" Association="Self.FK_Asset_portfolio">
+            <End Role="Portfolio" EntitySet="Portfolio" />
+            <End Role="Asset" EntitySet="Asset" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Investor_User" Association="Self.FK_Investor_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Investor" EntitySet="Investor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_portfolio_Investor" Association="Self.FK_portfolio_Investor">
+            <End Role="Investor" EntitySet="Investor" />
+            <End Role="Portfolio" EntitySet="Portfolio" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="APMDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Asset">
+          <Key>
+            <PropertyRef Name="Asset_ID" />
+          </Key>
+          <Property Name="Asset_ID" Type="Guid" Nullable="false" />
+          <Property Name="Asset_nbShare" Type="Int32" Nullable="false" />
+          <Property Name="Asset_ticker" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Asset_AQS_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Asset_shareCost" Type="Single" Nullable="false" />
+          <Property Name="Portfolio_ID" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Portfolio" Relationship="APMDBModel.FK_Asset_portfolio1" FromRole="Asset" ToRole="Portfolio1" />
+        </EntityType>
+        <EntityType Name="Investor">
+          <Key>
+            <PropertyRef Name="Investor_ID" />
+          </Key>
+          <Property Name="Investor_ID" Type="Guid" Nullable="false" />
+          <Property Name="Investor_FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Investor_birth" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Investor_timeHorizon" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Investor_email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Expert_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Investor_User" FromRole="Investor" ToRole="User" />
+          <NavigationProperty Name="Portfolio" Relationship="APMDBModel.FK_portfolio_Investor1" FromRole="Investor" ToRole="Portfolio1" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="user_email" />
+          </Key>
+          <Property Name="use_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="user_pwd" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="user_email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="user_role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Investor" Relationship="Self.FK_Investor_User" FromRole="User" ToRole="Investor" />
+        </EntityType>
+        <Association Name="FK_Investor_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Investor" Type="Self.Investor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="user_email" />
+            </Principal>
+            <Dependent Role="Investor">
+              <PropertyRef Name="Expert_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="APMDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Asset" EntityType="Self.Asset" />
+          <EntitySet Name="Investor" EntityType="Self.Investor" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <AssociationSet Name="FK_Investor_User" Association="Self.FK_Investor_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Investor" EntitySet="Investor" />
+          </AssociationSet>
+          <EntitySet Name="PortfolioSet" EntityType="APMDBModel.Portfolio" />
+          <AssociationSet Name="FK_Asset_portfolio1" Association="APMDBModel.FK_Asset_portfolio1">
+            <End Role="Portfolio1" EntitySet="PortfolioSet" />
+            <End Role="Asset" EntitySet="Asset" />
+          </AssociationSet>
+          <AssociationSet Name="FK_portfolio_Investor1" Association="APMDBModel.FK_portfolio_Investor1">
+            <End Role="Investor" EntitySet="Investor" />
+            <End Role="Portfolio1" EntitySet="PortfolioSet" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Portfolio">
+          <Key>
+            <PropertyRef Name="Portfolio_ID" />
+          </Key>
+          <Property Name="Portfolio_ID" Type="Guid" Nullable="false" />
+          <Property Name="Portfolio_title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Portfolio_creationDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Investor_ID" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Asset" Relationship="APMDBModel.FK_Asset_portfolio1" FromRole="Portfolio1" ToRole="Asset" />
+          <NavigationProperty Name="Investor" Relationship="APMDBModel.FK_portfolio_Investor1" FromRole="Portfolio1" ToRole="Investor" />
+        </EntityType>
+        <Association Name="FK_Asset_portfolio1">
+          <End Type="APMDBModel.Portfolio" Role="Portfolio1" Multiplicity="1" />
+          <End Type="APMDBModel.Asset" Role="Asset" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Portfolio1">
+              <PropertyRef Name="Portfolio_ID" />
+            </Principal>
+            <Dependent Role="Asset">
+              <PropertyRef Name="Portfolio_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_portfolio_Investor1">
+          <End Type="APMDBModel.Investor" Role="Investor" Multiplicity="1" />
+          <End Type="APMDBModel.Portfolio" Role="Portfolio1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Investor">
+              <PropertyRef Name="Investor_ID" />
+            </Principal>
+            <Dependent Role="Portfolio1">
+              <PropertyRef Name="Investor_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="APMDBModelStoreContainer" CdmEntityContainer="APMDBEntities">
+          <EntitySetMapping Name="Asset">
+            <EntityTypeMapping TypeName="APMDBModel.Asset">
+              <MappingFragment StoreEntitySet="Asset">
+                <ScalarProperty Name="Asset_ID" ColumnName="Asset_ID" />
+                <ScalarProperty Name="Asset_nbShare" ColumnName="Asset_nbShare" />
+                <ScalarProperty Name="Asset_ticker" ColumnName="Asset_ticker" />
+                <ScalarProperty Name="Asset_AQS_date" ColumnName="Asset_AQS_date" />
+                <ScalarProperty Name="Asset_shareCost" ColumnName="Asset_shareCost" />
+                <ScalarProperty Name="Portfolio_ID" ColumnName="Portfolio_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Investor">
+            <EntityTypeMapping TypeName="APMDBModel.Investor">
+              <MappingFragment StoreEntitySet="Investor">
+                <ScalarProperty Name="Investor_ID" ColumnName="Investor_ID" />
+                <ScalarProperty Name="Investor_FullName" ColumnName="Investor_FullName" />
+                <ScalarProperty Name="Investor_birth" ColumnName="Investor_birth" />
+                <ScalarProperty Name="Investor_timeHorizon" ColumnName="Investor_timeHorizon" />
+                <ScalarProperty Name="Investor_email" ColumnName="Investor_email" />
+                <ScalarProperty Name="Expert_ID" ColumnName="Expert_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="APMDBModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="use_name" ColumnName="use_name" />
+                <ScalarProperty Name="user_pwd" ColumnName="user_pwd" />
+                <ScalarProperty Name="user_email" ColumnName="user_email" />
+                <ScalarProperty Name="user_role" ColumnName="user_role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PortfolioSet">
+            <EntityTypeMapping TypeName="APMDBModel.Portfolio">
+              <MappingFragment StoreEntitySet="Portfolio">
+                <ScalarProperty Name="Investor_ID" ColumnName="Investor_ID" />
+                <ScalarProperty Name="Portfolio_creationDate" ColumnName="Portfolio_creationDate" />
+                <ScalarProperty Name="Portfolio_title" ColumnName="Portfolio_title" />
+                <ScalarProperty Name="Portfolio_ID" ColumnName="Portfolio_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Aucun" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
